@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+export async function getStaticPaths() {
+  return [
+    { params: { slug: 'first-post' } },
+  ];
+}
+const { slug } = Astro.params;
+---
+<Base title={`${slug} - 我的博客`}>
+  <article>
+    <h1>第一篇文章</h1>
+    <p>这是我的第一篇博客文章。</p>
+    <p>博客功能运行正常！</p>
+  </article>
+</Base>

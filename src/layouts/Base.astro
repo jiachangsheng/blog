@@ -1,0 +1,171 @@
+---
+const { title } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --bg-card: #111827;
+      --neon-blue: #00f5ff;
+      --neon-purple: #bf5af2;
+      --neon-green: #30d158;
+      --text-primary: #e5e7eb;
+      --text-secondary: #9ca3af;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      line-height: 1.7;
+      color: var(--text-primary);
+      background: var(--bg-dark);
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(0, 245, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(191, 90, 242, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    header {
+      background: rgba(17, 24, 39, 0.8);
+      border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+      padding: 1.5rem 2rem;
+      backdrop-filter: blur(10px);
+    }
+    nav {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      gap: 2.5rem;
+    }
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+      transition: width 0.3s ease;
+    }
+    nav a:hover {
+      color: var(--neon-blue);
+      text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+    }
+    nav a:hover::after { width: 100%; }
+    main {
+      max-width: 900px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin: 2.5rem 0 1rem;
+      color: var(--neon-blue);
+      text-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+    }
+    h2 a { color: inherit; }
+    p { margin-bottom: 1rem; color: var(--text-secondary); }
+    a {
+      color: var(--neon-blue);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      text-shadow: 0 0 10px rgba(0, 245, 255, 0.8);
+    }
+    ul {
+      list-style: none;
+      margin: 1rem 0;
+    }
+    li {
+      margin: 0.8rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    li::before {
+      content: '>';
+      position: absolute;
+      left: 0;
+      color: var(--neon-green);
+      font-weight: bold;
+    }
+    article {
+      background: var(--bg-card);
+      border: 1px solid rgba(0, 245, 255, 0.15);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      transition: all 0.3s ease;
+    }
+    article:hover {
+      border-color: rgba(0, 245, 255, 0.4);
+      box-shadow: 0 0 30px rgba(0, 245, 255, 0.1);
+    }
+    article h2 { margin-top: 0; }
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(0, 245, 255, 0.1);
+      margin-top: 4rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      background: rgba(0, 245, 255, 0.1);
+      border: 1px solid rgba(0, 245, 255, 0.3);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: var(--neon-blue);
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">首页</a>
+      <a href="/blog">博客</a>
+      <a href="/about">关于</a>
+    </nav>
+  </header>
+  <main>
+    <slot />
+  </main>
+  <footer>
+    <p>SYSTEM::ONLINE // ALL_SYSTEMS_NOMINAL</p>
+  </footer>
+</body>
+</html>
