@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const searchData = posts.map((post) => ({
+  slug: post.id.replace(/\.mdx?$/, ''),
+  title: post.data.title,
+  description: post.data.description,
+  tags: post.data.tags,
+}));
+---
+<Base title="搜索 - 我的博客" description="搜索博客文章">
+  <h1>搜索</h1>
+
+  <div style="margin: 2rem 0;">
+    <input
+      type="text"
+      id="search-input"
+      placeholder="输入关键词搜索..."
+      style="
+        width: 100%;
+        padding: 1rem;
+        background: var(--bg-card);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 1rem;
+      "
+    >
+  </div>
+
+  <div id="search-results"></div>
+
+  <script define:vars={{ searchData }}>
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+
+    function search(query) {
+      if (!query) {
+        results.innerHTML = '';
+        return;
+      }
+      const q = query.toLowerCase();
+      const filtered = searchData.filter(
+        (post) =>
+          post.title.toLowerCase().includes(q) ||
+          post.description.toLowerCase().includes(q) ||
+          post.tags.some((tag) => tag.toLowerCase().includes(q))
+      );
+
+      if (filtered.length === 0) {
+        results.innerHTML = '<p>没有找到相关文章</p>';
+        return;
+      }
+
+      results.innerHTML = filtered
+        .map(
+          (post) => `
+          <article>
+            <h2><a href="/blog/${post.slug}">${post.title}</a></h2>
+            <p>${post.description}</p>
+            <div class="tags">
+              ${post.tags.map((tag) => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+          </article>
+        `
+        )
+        .join('');
+    }
+
+    input.addEventListener('input', (e) => search(e.target.value));
+  </script>
+</Base>

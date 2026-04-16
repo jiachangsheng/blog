@@ -1,5 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const recentPosts = posts.slice(0, 5);
 ---
 <Base title="首页 - 我的博客">
   <h1>你好</h1>
@@ -8,6 +13,8 @@ import Base from '../layouts/Base.astro';
 
   <h2>最新文章</h2>
   <ul>
-    <li><a href="/blog/first-post">第一篇文章</a></li>
+    {recentPosts.map((post) => (
+      <li><a href={`/blog/${post.id.replace(/\.mdx?$/, '')}`}>{post.data.title}</a></li>
+    ))}
   </ul>
 </Base>

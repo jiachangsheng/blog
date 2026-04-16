@@ -1,12 +1,23 @@
 ---
-const { title } = Astro.props;
+const { title, description = '一个简洁的个人博客，采用科幻 AI 主题风格' } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 <!DOCTYPE html>
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href={canonicalURL}>
   <title>{title}</title>
+  <meta name="description" content={description}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={canonicalURL}>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <link rel="sitemap" href="/sitemap-index.xml">
   <style>
     :root {
       --bg-dark: #0a0e17;
@@ -86,7 +97,6 @@ const { title } = Astro.props;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      text-shadow: none;
     }
     h2 {
       font-size: 1.5rem;
@@ -150,6 +160,27 @@ const { title } = Astro.props;
       font-size: 0.75rem;
       color: var(--neon-blue);
       margin-right: 0.5rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .tag:hover {
+      background: rgba(0, 245, 255, 0.2);
+      text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .search-link {
+      margin-left: auto;
+    }
+    .search-link a {
+      color: var(--neon-purple);
+    }
+    .search-link a:hover {
+      text-shadow: 0 0 10px rgba(191, 90, 242, 0.8);
     }
   </style>
 </head>
@@ -159,6 +190,7 @@ const { title } = Astro.props;
       <a href="/">首页</a>
       <a href="/blog">博客</a>
       <a href="/about">关于</a>
+      <span class="search-link"><a href="/search">🔍 搜索</a></span>
     </nav>
   </header>
   <main>

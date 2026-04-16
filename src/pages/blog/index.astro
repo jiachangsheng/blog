@@ -1,12 +1,24 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
-<Base title="博客 - 我的博客">
+<Base title="博客 - 我的博客" description="记录学习与思考">
   <h1>博客</h1>
   <p>记录学习与思考</p>
 
-  <article>
-    <h2><a href="/blog/first-post">第一篇文章</a></h2>
-    <p>这是我的第一篇博客文章，用来测试博客功能。</p>
-  </article>
+  {posts.map((post) => (
+    <article>
+      <h2><a href={`/blog/${post.id.replace(/\.mdx?$/, '')}`}>{post.data.title}</a></h2>
+      <p>{post.data.description}</p>
+      <div class="tags">
+        {post.data.tags.map((tag) => (
+          <a href={`/tags/${tag}`} class="tag">{tag}</a>
+        ))}
+      </div>
+      <p><small>{post.data.pubDate.toLocaleDateString('zh-CN')}</small></p>
+    </article>
+  ))}
 </Base>
