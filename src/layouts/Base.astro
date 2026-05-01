@@ -1,9 +1,16 @@
 ---
 const { title, description = '一个简洁的个人博客，采用科幻 AI 主题风格' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const themes = [
+  { id: 'cyberpunk', name: '赛博朋克', color: '#00f5ff' },
+  { id: 'matrix', name: '矩阵', color: '#30d158' },
+  { id: 'sunset', name: '日落', color: '#ff6b35' },
+  { id: 'ocean', name: '深海', color: '#00b4d8' },
+  { id: 'forest', name: '森林', color: '#4a9c6d' },
+];
 ---
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" data-theme="cyberpunk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +34,62 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       --neon-green: #30d158;
       --text-primary: #e5e7eb;
       --text-secondary: #9ca3af;
+      --accent: var(--neon-blue);
+      --accent-glow: rgba(0, 245, 255, 0.3);
+      --gradient-start: var(--neon-blue);
+      --gradient-end: var(--neon-purple);
+    }
+    [data-theme="matrix"] {
+      --bg-dark: #001100;
+      --bg-card: #003300;
+      --neon-blue: #00ff00;
+      --neon-purple: #00cc00;
+      --neon-green: #00ff00;
+      --text-primary: #00ff00;
+      --text-secondary: #009900;
+      --accent: var(--neon-green);
+      --accent-glow: rgba(0, 255, 0, 0.3);
+      --gradient-start: var(--neon-green);
+      --gradient-end: var(--neon-green);
+    }
+    [data-theme="sunset"] {
+      --bg-dark: #1a0a0a;
+      --bg-card: #2d1515;
+      --neon-blue: #ff6b35;
+      --neon-purple: #ff2d55;
+      --neon-green: #ff9500;
+      --text-primary: #ffe5d9;
+      --text-secondary: #cc9988;
+      --accent: var(--neon-blue);
+      --accent-glow: rgba(255, 107, 53, 0.3);
+      --gradient-start: var(--neon-blue);
+      --gradient-end: var(--neon-purple);
+    }
+    [data-theme="ocean"] {
+      --bg-dark: #0a1628;
+      --bg-card: #0f2847;
+      --neon-blue: #00b4d8;
+      --neon-purple: #0077b6;
+      --neon-green: #00f5ff;
+      --text-primary: #caf0f8;
+      --text-secondary: #90e0ef;
+      --accent: var(--neon-blue);
+      --accent-glow: rgba(0, 180, 216, 0.3);
+      --gradient-start: var(--neon-blue);
+      --gradient-end: var(--neon-purple);
+    }
+    [data-theme="forest"] {
+      --bg-dark: #0a1a0a;
+      --bg-card: #1a2e1a;
+      --neon-blue: #4a9c6d;
+      --neon-purple: #2d6a4f;
+      --neon-green: #95d5b2;
+      --text-primary: #d8f3dc;
+      --text-secondary: #95d5b2;
+      --accent: var(--neon-green);
+      --accent-glow: rgba(74, 156, 109, 0.3);
+      --gradient-start: var(--neon-green);
+      --gradient-end: var(--neon-blue);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -44,14 +107,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       width: 100%;
       height: 100%;
       background:
-        radial-gradient(ellipse at 20% 20%, rgba(0, 245, 255, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(191, 90, 242, 0.08) 0%, transparent 50%);
+        radial-gradient(ellipse at 20% 20%, color-mix(in srgb, var(--accent) 8%, transparent) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, color-mix(in srgb, var(--gradient-end) 8%, transparent) 0%, transparent 50%);
       pointer-events: none;
       z-index: -1;
     }
     header {
-      background: rgba(17, 24, 39, 0.8);
-      border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+      background: color-mix(in srgb, var(--bg-card) 80%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
       padding: 1.5rem 2rem;
       backdrop-filter: blur(10px);
     }
@@ -60,6 +123,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       margin: 0 auto;
       display: flex;
       gap: 2.5rem;
+      align-items: center;
     }
     nav a {
       color: var(--text-secondary);
@@ -77,12 +141,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       left: 0;
       width: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+      background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
       transition: width 0.3s ease;
     }
     nav a:hover {
-      color: var(--neon-blue);
-      text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+      color: var(--accent);
+      text-shadow: 0 0 10px var(--accent-glow);
     }
     nav a:hover::after { width: 100%; }
     main {
@@ -93,7 +157,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     h1 {
       font-size: 2.5rem;
       margin-bottom: 1rem;
-      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -101,18 +165,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     h2 {
       font-size: 1.5rem;
       margin: 2.5rem 0 1rem;
-      color: var(--neon-blue);
-      text-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+      color: var(--accent);
+      text-shadow: 0 0 20px var(--accent-glow);
     }
     h2 a { color: inherit; }
     p { margin-bottom: 1rem; color: var(--text-secondary); }
     a {
-      color: var(--neon-blue);
+      color: var(--accent);
       text-decoration: none;
       transition: all 0.3s ease;
     }
     a:hover {
-      text-shadow: 0 0 10px rgba(0, 245, 255, 0.8);
+      text-shadow: 0 0 10px var(--accent-glow);
     }
     ul {
       list-style: none;
@@ -132,15 +196,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     }
     article {
       background: var(--bg-card);
-      border: 1px solid rgba(0, 245, 255, 0.15);
+      border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
       border-radius: 8px;
       padding: 2rem;
       margin: 1.5rem 0;
       transition: all 0.3s ease;
     }
     article:hover {
-      border-color: rgba(0, 245, 255, 0.4);
-      box-shadow: 0 0 30px rgba(0, 245, 255, 0.1);
+      border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+      box-shadow: 0 0 30px color-mix(in srgb, var(--accent) 10%, transparent);
     }
     article h2 { margin-top: 0; }
     footer {
@@ -148,24 +212,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       padding: 3rem 2rem;
       color: var(--text-secondary);
       font-size: 0.8rem;
-      border-top: 1px solid rgba(0, 245, 255, 0.1);
+      border-top: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
       margin-top: 4rem;
     }
     .tag {
       display: inline-block;
       padding: 0.2rem 0.6rem;
-      background: rgba(0, 245, 255, 0.1);
-      border: 1px solid rgba(0, 245, 255, 0.3);
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
       border-radius: 4px;
       font-size: 0.75rem;
-      color: var(--neon-blue);
+      color: var(--accent);
       margin-right: 0.5rem;
       text-decoration: none;
       transition: all 0.3s ease;
     }
     .tag:hover {
-      background: rgba(0, 245, 255, 0.2);
-      text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+      background: color-mix(in srgb, var(--accent) 20%, transparent);
+      text-shadow: 0 0 10px var(--accent-glow);
     }
     .tags {
       display: flex;
@@ -177,10 +241,75 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       margin-left: auto;
     }
     .search-link a {
-      color: var(--neon-purple);
+      color: var(--gradient-end);
     }
     .search-link a:hover {
-      text-shadow: 0 0 10px rgba(191, 90, 242, 0.8);
+      text-shadow: 0 0 10px var(--accent-glow);
+    }
+    .theme-switcher {
+      display: flex;
+      gap: 0.5rem;
+      margin-left: auto;
+    }
+    .theme-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0;
+    }
+    .theme-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
+      transform: scale(1.1);
+    }
+    .theme-btn.active {
+      border-color: var(--text-primary);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+    .theme-dropdown {
+      position: relative;
+    }
+    .theme-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: var(--bg-card);
+      border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+      border-radius: 8px;
+      padding: 0.5rem;
+      min-width: 120px;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .theme-dropdown:hover .theme-dropdown-content {
+      display: block;
+    }
+    .theme-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      transition: background 0.2s;
+    }
+    .theme-option:hover {
+      background: color-mix(in srgb, var(--accent) 15%, transparent);
+    }
+    .theme-option.active {
+      background: color-mix(in srgb, var(--accent) 20%, transparent);
+      color: var(--accent);
+    }
+    .theme-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
     }
   </style>
 </head>
@@ -191,6 +320,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <a href="/blog">博客</a>
       <a href="/about">关于</a>
       <span class="search-link"><a href="/search">🔍 搜索</a></span>
+      <div class="theme-dropdown">
+        <span class="theme-btn" id="currentTheme" style="background: var(--accent);"></span>
+        <div class="theme-dropdown-content">
+          {themes.map((theme) => (
+            <div class="theme-option" data-theme-id={theme.id} onclick="setTheme('{theme.id}')">
+              <span class="theme-dot" style={`background: ${theme.color};`}></span>
+              <span>{theme.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </nav>
   </header>
   <main>
@@ -200,4 +340,27 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <p>SYSTEM::ONLINE // ALL_SYSTEMS_NOMINAL</p>
   </footer>
 </body>
+<script>
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('blog-theme', theme);
+    updateActiveDot(theme);
+  }
+  function updateActiveDot(theme) {
+    document.querySelectorAll('.theme-option').forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.themeId === theme);
+    });
+    const colors = {
+      cyberpunk: '#00f5ff',
+      matrix: '#30d158',
+      sunset: '#ff6b35',
+      ocean: '#00b4d8',
+      forest: '#4a9c6d'
+    };
+    document.getElementById('currentTheme').style.background = colors[theme] || '#00f5ff';
+  }
+  const saved = localStorage.getItem('blog-theme') || 'cyberpunk';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateActiveDot(saved);
+</script>
 </html>
